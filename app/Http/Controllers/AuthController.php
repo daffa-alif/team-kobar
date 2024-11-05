@@ -31,7 +31,7 @@ class AuthController extends Controller
 
         // Attempt to log the user in with the provided credentials
         if (Auth::attempt($request->only('email', 'password'))) {
-            return redirect()->intended('welcome');  // Redirect to the welcome page if login is successful
+            return redirect()->intended('home');  // Redirect to the welcome page if login is successful
         }
 
         // If authentication fails, throw a validation error

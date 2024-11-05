@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use App\Http\Controllers\JournalController;
 use App\Models\User;
 
 // Root route: Redirects to login if not authenticated, otherwise goes to welcome
@@ -107,3 +108,11 @@ Route::put('/profile/update', function (Request $request) {
 
     return redirect('/welcome')->with('success', 'Profile updated successfully!');
 })->middleware('auth')->name('profile.update');
+
+
+Route::get('/journal/index', [JournalController::class, 'index'])->middleware('auth')->name('journal.index');
+Route::get('/journal/create', [JournalController::class, 'create'])->middleware('auth')->name('journal.create');
+Route::post('/journal/store', [JournalController::class, 'store'])->middleware('auth')->name('journal.store');
+Route::get('/journal/{id}', [JournalController::class, 'show'])->name('journal.show');
+Route::delete('/journal/{id}', [JournalController::class, 'destroy'])->name('journal.destroy');
+
