@@ -74,7 +74,7 @@ class AuthController extends Controller
         Auth::login($user);
 
         // Redirect to the welcome page after registration
-        return redirect()->route('welcome'); // Use route helper for redirection
+        return redirect()->route('journal.index'); // Use route helper for redirection
     }
 
     /**

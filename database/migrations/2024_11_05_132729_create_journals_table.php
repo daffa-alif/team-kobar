@@ -14,11 +14,10 @@ return new class extends Migration
         Schema::create('journals', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->string('titlle');
+            $table->string('title');
             $table->text('content');
             $table->string('image_url')->nullable();
-            $table->timestamps();
-        
+            $table->timestamps();      
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
         
