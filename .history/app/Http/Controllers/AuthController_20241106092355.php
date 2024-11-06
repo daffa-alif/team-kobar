@@ -1,6 +1,6 @@
 <?php
 
-// app/Http/Controllers/AuthController.php// app/Http/Controllers/AuthController.php
+// app/Http/Controllers/AuthController.php
 namespace App\Http\Controllers;
 
 use App\Models\User;
@@ -52,29 +52,31 @@ class AuthController extends Controller
      * Handle the registration process.
      */
     public function register(Request $request)
-    {
-        // Validate user registration input
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
-    
-        // Prepare user data for creation
-        $userData = $request->only('name', 'email');
-        $userData['password'] = Hash::make($request->password);
-    
-        // If a profile picture is uploaded, store it and set its path in the user data
-        if ($request->hasFile('profile_picture')) {
-            $userData['profile_picture'] = $request->file('profile_picture')->store('profile_pictures', 'public');
-        }
-    
-        // Create the user
-        User::create($userData);
-    
-        // Redirect to login page after registration
-        return redirect()->route('login')->with('success', 'Account created successfully! Please log in.');
+{
+    // Validate user registration input
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users',
+        'password' => 'required|string|min:8|confirmed',
+    ]);
+
+    // Prepare user data for creation
+    $userData = $request->only('name', 'email');
+    $userData['password'] = Hash::make($request->password);
+
+    // If a profile picture is uploaded, store it and set its path in the user data
+    if ($request->hasFile('profile_picture')) {
+        $userData['profile_picture'] = $request->file('profile_picture')->store('profile_pictures', 'public');
     }
+
+    // Create the user
+    $user = User::create($userData);
+
+    // Redirect to login page after registration
+    return redirect()->route('login')->with('success', 'Account created successfully! Please log in.');
+}
+
+    
 
     /**
      * Handle the logout process.

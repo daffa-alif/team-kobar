@@ -1,6 +1,6 @@
 <?php
 
-// app/Http/Controllers/AuthController.php// app/Http/Controllers/AuthController.php
+// app/Http/Controllers/AuthController.php
 namespace App\Http\Controllers;
 
 use App\Models\User;
@@ -70,11 +70,12 @@ class AuthController extends Controller
         }
     
         // Create the user
-        User::create($userData);
+        $user = User::create($userData);
     
         // Redirect to login page after registration
-        return redirect()->route('login')->with('success', 'Account created successfully! Please log in.');
+        return redirect()->route('auth.login')->with('success', 'Account created successfully! Please log in.');
     }
+    
 
     /**
      * Handle the logout process.
