@@ -117,5 +117,5 @@ Route::post('/journal/store', [JournalController::class, 'store'])->middleware('
 Route::get('/journal/{id}', [JournalController::class, 'show'])->name('journal.show');
 Route::delete('/journal/{id}', [JournalController::class, 'destroy'])->name('journal.destroy');
 
-Route::resource('welcome', WelcomeController::class);
+
 
