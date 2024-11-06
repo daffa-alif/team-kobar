@@ -42,14 +42,9 @@ Route::post('/login', function (Request $request) {
 });
 
 // Show the registration form
-// Show the registration form
 Route::get('/register', function () {
     return view('auth.register');
 })->name('register');
-
-// Handle the registration process
-Route::post('/register', [AuthController::class, 'register']);
-
 
 // Handle the registration process
 Route::post('/register', function (Request $request) {

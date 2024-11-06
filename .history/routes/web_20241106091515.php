@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
-use App\Http\Controllers\JournalController;
+use app\http\controller\JournalController;
 use App\Models\User;
 
 // Root route: Redirects to login if not authenticated, otherwise goes to welcome
@@ -42,14 +42,9 @@ Route::post('/login', function (Request $request) {
 });
 
 // Show the registration form
-// Show the registration form
 Route::get('/register', function () {
     return view('auth.register');
 })->name('register');
-
-// Handle the registration process
-Route::post('/register', [AuthController::class, 'register']);
-
 
 // Handle the registration process
 Route::post('/register', function (Request $request) {

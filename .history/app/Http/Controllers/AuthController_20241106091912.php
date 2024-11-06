@@ -73,7 +73,7 @@ class AuthController extends Controller
         $user = User::create($userData);
     
         // Redirect to login page after registration
-        return redirect()->route('auth.login')->with('success', 'Account created successfully! Please log in.');
+        return redirect()->route('login')->with('success', 'Account created successfully! Please log in.');
     }
     
 
