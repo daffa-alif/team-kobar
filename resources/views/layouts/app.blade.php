@@ -7,10 +7,10 @@
 </head>
 <body>
     <ul>
-        <li><a href="{{route('journal.index')}}">Home</a></li>
+        <li><a href="{{route('journal.index')}}">Beranda</a></li>
         <li><a href="#">Albums</a></li>
-        <li><a href="{{route('journal.create')}}">Upload</a></li>
-        <li><a href="#">Profile</a></li>
+        <li><a href="{{route('journal.create')}}">Unggah</a></li>
+        <li><a href="#">data diri</a></li>
         </ul>
     @yield('content')
 </body>
