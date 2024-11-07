@@ -1,9 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Profile</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('content')
     <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
         <div style="text-align: center;">
             <h1>Profile</h1>
@@ -31,5 +28,4 @@
             </div>
         </div>
     </div>
-</body>
-</html>
+@endsection

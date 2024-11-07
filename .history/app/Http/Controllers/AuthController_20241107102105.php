@@ -114,7 +114,7 @@ public function update(Request $request)
     $user->description = $request->description; // Update description if provided
     $user->save(); // Save changes
 
-    return view ('profile.welcome');
+    return redirect()->route('profile.show', ['user' => $user->id])->with('success', 'Profile updated successfully!');
 }
 
     

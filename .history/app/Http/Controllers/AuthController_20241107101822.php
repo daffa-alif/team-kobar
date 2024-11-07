@@ -85,37 +85,5 @@ class AuthController extends Controller
         return redirect()->route('/');  // Redirect to the login page after logout
     }
 
-    // app/Http/Controllers/AuthController.php
-
-public function update(Request $request)
-{
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|string|email|max:255',
-        'profile_picture' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
-        'description' => 'nullable|string|max:500',
-    ]);
-
-    $user = Auth::user(); // Get the currently authenticated user
-
-    // Update user data
-    $user->name = $request->name;
-    $user->email = $request->email;
-
-    // Handle profile picture upload if available
-    if ($request->hasFile('profile_picture')) {
-        // Delete old profile picture if necessary
-        if ($user->profile_picture) {
-            \Storage::delete('public/' . $user->profile_picture);
-        }
-        $user->profile_picture = $request->file('profile_picture')->store('profile_pictures', 'public');
-    }
-
-    $user->description = $request->description; // Update description if provided
-    $user->save(); // Save changes
-
-    return view ('profile.welcome');
-}
-
     
 }

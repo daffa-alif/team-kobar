@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\JournalController;
-use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/welcome', function () {
     return view('welcome'); // or whatever view you want to return
@@ -51,7 +51,3 @@ Route::post('/journal/store', [JournalController::class, 'store'])->middleware('
 Route::get('/journal/{id}', [JournalController::class, 'show'])->name('journal.show');
 Route::delete('/journal/{id}', [JournalController::class, 'destroy'])->name('journal.destroy');
 
-Route::middleware('auth')->group(function () {
-    // Define the route for viewing the profile page
-    Route::get('/profile', [ProfileController::class, 'welcome'])->name('profile.welcome');
-});

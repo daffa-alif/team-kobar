@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\JournalController;
-use App\Http\Controllers\ProfileController;
 
 Route::get('/welcome', function () {
     return view('welcome'); // or whatever view you want to return
