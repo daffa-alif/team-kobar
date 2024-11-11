@@ -14,25 +14,16 @@
         @forelse($journals as $journal)
             <div class="col-md-4 mb-4">
                 <div class="card" style="width: 18rem;">
-                    <img src="{{ $journal->image_url ? asset('storage/' . $journal->image_url) : 'https://via.placeholder.com/150' }}" class="card-img-top" alt="{{ $journal->title }}">
+                <img src="{{ $journal->image_url ? asset('storage/' . $journal->image_url) : 'https://via.placeholder.com/150' }}" class="card-img-top" alt="{{ $journal->title }}">
                     <div class="card-body">
                         <h5 class="card-title">{{ $journal->title }}</h5>
                         <p class="card-text">{{ Str::limit($journal->content, 100) }}</p>
-                        
-                        <!-- Menampilkan tanggal pembuatan dan pembaruan dengan kata "pukul" -->
-                        <p class="text-muted">
-                            Tanggal dibuat: {{ $journal->created_at->format('d M Y') }} pukul {{ $journal->created_at->format('H:i') }}<br>
-                            @if($journal->created_at != $journal->updated_at)
-                            Pembaruan terakhir: {{ $journal->updated_at->format('d M Y') }} pukul {{ $journal->updated_at->format('H:i') }}
-                            @endif
-                        </p>
-
                         <a href="{{ route('journal.show', $journal->id) }}" class="btn btn-primary">Read More</a>
 
-                        <form action="{{ route('journal.destroy', $journal->id) }}" method="POST" style="display:inline;">
+                        <form actionac="{{ route('journal.destroy', $journal->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger " onclick="return confirm('Yakin ingin menghapus jurnal ini?')">Delete</button>
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus jurnal ini?')">Delete</button>
                         </form>
                     </div>
                 </div>

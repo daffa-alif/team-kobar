@@ -21,9 +21,9 @@
                         
                         <!-- Menampilkan tanggal pembuatan dan pembaruan dengan kata "pukul" -->
                         <p class="text-muted">
-                            Tanggal dibuat: {{ $journal->created_at->format('d M Y') }} pukul {{ $journal->created_at->format('H:i') }}<br>
+                            Tanggal dibuat: {{ $journal->created_at->format('d M Y \p\u{k}ul H:i') }}<br>
                             @if($journal->created_at != $journal->updated_at)
-                            Pembaruan terakhir: {{ $journal->updated_at->format('d M Y') }} pukul {{ $journal->updated_at->format('H:i') }}
+                            Pembaruan terakhir: {{ $journal->updated_at->format('d M Y \p\u{k}ul H:i') }}
                             @endif
                         </p>
 

@@ -19,11 +19,11 @@
                         <h5 class="card-title">{{ $journal->title }}</h5>
                         <p class="card-text">{{ Str::limit($journal->content, 100) }}</p>
                         
-                        <!-- Menampilkan tanggal pembuatan dan pembaruan dengan kata "pukul" -->
+                        <!-- Menampilkan tanggal pembuatan dan pembaruan -->
                         <p class="text-muted">
-                            Tanggal dibuat: {{ $journal->created_at->format('d M Y') }} pukul {{ $journal->created_at->format('H:i') }}<br>
+                            Tanggal dibuat: {{ $journal->created_at->format('d M Y H:i') }}<br>
                             @if($journal->created_at != $journal->updated_at)
-                            Pembaruan terakhir: {{ $journal->updated_at->format('d M Y') }} pukul {{ $journal->updated_at->format('H:i') }}
+                            Pembaruan terakhir {{ $journal->updated_at->format('d M Y H:i') }}
                             @endif
                         </p>
 
