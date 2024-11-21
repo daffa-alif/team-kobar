@@ -13,7 +13,7 @@ Route::get('/welcome', function () {
 
 // Root route: Redirects to login if not authenticated, otherwise goes to welcome
 Route::get('/', function () {
-    return Auth::check() ? redirect('/welcome') : redirect()->route('login');
+    return Auth::check() ? redirect('/profile') : redirect()->route('login');
 });
 
 // Show the login form
@@ -33,7 +33,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Protected route for welcome page, requires authentication
 Route::get('/welcome', function () {
-    return view('profile.edit');
+    return view('welcome');
 })->middleware('auth');
 
 // Show the profile edit form

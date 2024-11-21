@@ -28,6 +28,9 @@
                         <a class="nav-link" href="{{ route('journal.index') }}">Beranda</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="#">Albums</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ route('journal.create') }}">Unggah</a>
                     </li>
                     <li class="nav-item">

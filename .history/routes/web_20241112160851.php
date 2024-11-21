@@ -33,7 +33,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Protected route for welcome page, requires authentication
 Route::get('/welcome', function () {
-    return view('profile.edit');
+    return view('welcome');
 })->middleware('auth');
 
 // Show the profile edit form

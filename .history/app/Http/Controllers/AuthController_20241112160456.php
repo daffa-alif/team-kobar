@@ -1,5 +1,6 @@
 <?php
 
+// app/Http/Controllers/AuthController.php// app/Http/Controllers/AuthController.php
 namespace App\Http\Controllers;
 
 use App\Models\User;
@@ -23,15 +24,14 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        // Validate input
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
 
-        // Attempt to log in with provided credentials
+        // Attempt to log the user in with the provided credentials
         if (Auth::attempt($request->only('email', 'password'))) {
-            return redirect()->route('profile.welcome');  // Redirect to the profile welcome page
+            return redirect()->intended('welcome');  // Redirect to the welcome page if login is successful
         }
 
         // If authentication fails, throw a validation error
@@ -53,25 +53,25 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
-        // Validate registration input
+        // Validate user registration input
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
         ]);
-
+    
         // Prepare user data for creation
         $userData = $request->only('name', 'email');
         $userData['password'] = Hash::make($request->password);
-
-        // Handle profile picture upload if available
+    
+        // If a profile picture is uploaded, store it and set its path in the user data
         if ($request->hasFile('profile_picture')) {
             $userData['profile_picture'] = $request->file('profile_picture')->store('profile_pictures', 'public');
         }
-
+    
         // Create the user
         User::create($userData);
-
+    
         // Redirect to login page after registration
         return redirect()->route('login')->with('success', 'Account created successfully! Please log in.');
     }
@@ -81,43 +81,42 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
-        Auth::logout(); // Log out the user
-        return redirect()->route('login'); // Redirect to the home page after logout
+        Auth::logout();  // Log out the user
+        return redirect()->route('home'); // or simply redirect('/')
+  // Redirect to the login page after logout
     }
 
-    /**
-     * Handle profile update process.
-     */
-    public function update(Request $request)
-    {
-        // Validate input
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255',
-            'profile_picture' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
-            'description' => 'nullable|string|max:500',
-        ]);
+    // app/Http/Controllers/AuthController.php
 
-        $user = Auth::user(); // Get the currently authenticated user
+public function update(Request $request)
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255',
+        'profile_picture' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+        'description' => 'nullable|string|max:500',
+    ]);
 
-        // Update user data
-        $user->name = $request->name;
-        $user->email = $request->email;
+    $user = Auth::user(); // Get the currently authenticated user
 
-        // Handle profile picture upload if available
-        if ($request->hasFile('profile_picture')) {
-            // Delete old profile picture if it exists
-            if ($user->profile_picture) {
-                \Storage::delete('public/' . $user->profile_picture);
-            }
-            $user->profile_picture = $request->file('profile_picture')->store('profile_pictures', 'public');
+    // Update user data
+    $user->name = $request->name;
+    $user->email = $request->email;
+
+    // Handle profile picture upload if available
+    if ($request->hasFile('profile_picture')) {
+        // Delete old profile picture if necessary
+        if ($user->profile_picture) {
+            \Storage::delete('public/' . $user->profile_picture);
         }
-
-        // Update description if provided
-        $user->description = $request->description;
-        $user->save(); // Save changes
-
-        // Redirect to profile welcome page after update
-        return redirect()->route('profile.welcome')->with('success', 'Profile updated successfully.');
+        $user->profile_picture = $request->file('profile_picture')->store('profile_pictures', 'public');
     }
+
+    $user->description = $request->description; // Update description if provided
+    $user->save(); // Save changes
+
+    return view ('profile.welcome');
+}
+
+    
 }
