@@ -12,22 +12,47 @@ class JournalController extends Controller
     /**
      * Menampilkan halaman index dengan daftar jurnal dalam bentuk card.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Mengambil jurnal yang dibuat oleh user yang sedang login
-        $journals = Journal::where('user_id', auth()->id())->get();
+        // Ambil parameter 'search' dari query string
+        $search = $request->query('search');
+
+        // Jika ada kata kunci pencarian, filter jurnal berdasarkan judul atau konten
+        if ($search) {
+            $journals = Journal::where('user_id', auth()->id())
+                ->where(function ($query) use ($search) {
+                    $query->where('title', 'like', '%' . $search . '%')
+                          ->orWhere('content', 'like', '%' . $search . '%');
+                })
+                ->paginate(9);  // Gunakan paginate, bukan get()
+        } else {
+            // Jika tidak ada pencarian, paginate semua jurnal
+            $journals = Journal::where('user_id', auth()->id())->paginate(9);
+        }
 
         return view('journal.index', compact('journals'));
     }
 
+    /**
+     * Menampilkan halaman detail jurnal.
+     *
+     * @param  int  $id
+     * @return \Illuminate\View\View
+     */
     public function show($id)
     {
         $journal = Journal::findOrFail($id);
         return view('journal.show', compact('journal'));
     }
 
+    /**
+     * Menampilkan form untuk membuat jurnal baru.
+     *
+     * @return \Illuminate\View\View
+     */
     public function create()
     {
         return view('journal.create');
@@ -46,6 +71,7 @@ class JournalController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            'cropped_image' => 'nullable|string',  // Validasi untuk gambar yang dipotong
         ]);
 
         // Menyiapkan data untuk disimpan
@@ -58,6 +84,21 @@ class JournalController extends Controller
         // Proses upload gambar jika ada
         if ($request->hasFile('image')) {
             $journalData['image_url'] = $request->file('image')->store('journal_images', 'public');
+        }
+
+        // Handle gambar yang dipotong (jika ada)
+        if ($request->cropped_image) {
+            // Decode data gambar base64
+            $imageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $request->cropped_image));
+            
+            // Generate nama file yang unik
+            $fileName = 'journal_' . time() . '.jpg';
+            
+            // Simpan file ke dalam direktori 'journal_images'
+            Storage::disk('public')->put('journal_images/' . $fileName, $imageData);
+            
+            // Simpan nama file dalam database
+            $journalData['image_url'] = 'journal_images/' . $fileName;
         }
 
         // Simpan data jurnal ke database
@@ -93,6 +134,7 @@ class JournalController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            'cropped_image' => 'nullable|string',  // Validasi untuk gambar yang dipotong
         ]);
 
         // Mencari jurnal yang akan diupdate
@@ -102,15 +144,24 @@ class JournalController extends Controller
         $journal->title = $request->title;
         $journal->content = $request->content;
 
-        // Jika ada gambar yang diupload, proses dan update
-        if ($request->hasFile('image')) {
+        // Jika ada gambar yang dipotong, proses dan update
+        if ($request->cropped_image) {
             // Hapus gambar lama jika ada
             if ($journal->image_url && Storage::exists('public/' . $journal->image_url)) {
                 Storage::delete('public/' . $journal->image_url);
             }
 
-            // Upload gambar baru
-            $journal->image_url = $request->file('image')->store('journal_images', 'public');
+            // Decode data gambar base64
+            $imageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $request->cropped_image));
+            
+            // Generate nama file yang unik
+            $fileName = 'journal_' . time() . '.jpg';
+            
+            // Simpan file ke dalam direktori 'journal_images'
+            Storage::disk('public')->put('journal_images/' . $fileName, $imageData);
+            
+            // Update URL gambar dalam database
+            $journal->image_url = 'journal_images/' . $fileName;
         }
 
         // Simpan perubahan
