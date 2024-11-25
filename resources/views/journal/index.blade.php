@@ -17,7 +17,7 @@
                     <img src="{{ $journal->image_url ? asset('storage/' . $journal->image_url) : 'https://via.placeholder.com/150' }}" class="card-img-top" alt="{{ $journal->title }}">
                     <div class="card-body">
                         <h5 class="card-title">{{ $journal->title }}</h5>
-                        <p class="card-text">{{ Str::limit($journal->content, 100) }}</p>
+                        
                         
                         <!-- Menampilkan tanggal pembuatan dan pembaruan dengan kata "pukul" -->
                         <p class="text-muted">

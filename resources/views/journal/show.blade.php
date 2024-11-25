@@ -10,7 +10,7 @@
             <p class="text-muted">Published on {{ $journal->created_at->format('F j, Y') }}</p>
             <hr>
             <p class="card-text" style="font-size: 18px; line-height: 1.6;">
-                {{ $journal->content }}
+                {!! $journal->content !!}
             </p>
             <a href="{{ route('journal.index') }}" class="btn btn-secondary mt-4">Back to Journals</a>
         </div>

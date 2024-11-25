@@ -40,32 +40,35 @@ class JournalController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
-    {
-        // Validasi input
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
-            'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
-        ]);
+{
+    // Validasi input
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'content' => 'required|string',
+        'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+    ]);
 
-        // Menyiapkan data untuk disimpan
-        $journalData = [
-            'user_id' => Auth::id(),
-            'title' => $request->title,
-            'content' => $request->content,
-        ];
+    // Bersihkan kurawal dari konten
+    $cleanedContent = str_replace(['{', '}'], '', $request->content);
 
-        // Proses upload gambar jika ada
-        if ($request->hasFile('image')) {
-            $journalData['image_url'] = $request->file('image')->store('journal_images', 'public');
-        }
+    // Menyiapkan data untuk disimpan
+    $journalData = [
+        'user_id' => Auth::id(),
+        'title' => $request->title,
+        'content' => $cleanedContent, // Simpan konten yang sudah dibersihkan
+    ];
 
-        // Simpan data jurnal ke database
-        Journal::create($journalData);
-
-        // Redirect ke halaman index dengan pesan sukses
-        return redirect()->route('journal.index')->with('success', 'Journal created successfully!');
+    // Proses upload gambar jika ada
+    if ($request->hasFile('image')) {
+        $journalData['image_url'] = $request->file('image')->store('journal_images', 'public');
     }
+
+    // Simpan data jurnal ke database
+    Journal::create($journalData);
+
+    // Redirect ke halaman index dengan pesan sukses
+    return redirect()->route('journal.index')->with('success', 'Journal created successfully!');
+}
 
     /**
      * Menampilkan form untuk mengedit jurnal yang ada.
